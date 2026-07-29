@@ -14,7 +14,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Chart.js สำหรับ Dashboard -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -152,11 +152,12 @@
             position: sticky;
             top: 0;
             z-index: 100;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
             padding: 12px 30px;
-            margin: 0 10px;
+            margin: 5px 10px;
             border: none;
             background: #f0f0f0;
             color: #666;
@@ -226,14 +227,10 @@
 
         .test-image {
             width: 100%;
-            height: 200px;
+            height: 220px;
             object-fit: cover;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-            color: white;
+            display: block;
         }
 
         .test-content {
@@ -265,6 +262,7 @@
             margin-bottom: 20px;
             font-size: 0.9rem;
             color: #666;
+            flex-wrap: wrap;
         }
 
         .test-stats span {
@@ -617,52 +615,52 @@
     </footer>
 
     <script>
-        // Google Apps Script URL (คุณต้อง deploy และใส่ URL ที่นี่)
+        // ⚠️ สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ของคุณจาก Google Apps Script
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykA8vwr8EuJl-ynct7ySdvftiJOM4ZUT9EPcFGJmoGYhA4px7i8sUajfPscTCAOTTYZA/exec';
         
-        // Test Data
+        // Test Data - ใช้รูปภาพจากโฟลเดอร์ images/
         const testsData = [
             {
                 id: 1,
                 title: 'บทบาทและคุณค่าของศาสนาในสังคมไทยยุคปัจจุบัน',
                 url: 'https://forms.gle/T7EX5fmKP6RvNSL99',
                 icon: '🕌',
-                image: 'https://images.unsplash.com/photo-1542640244-7e672d6cef4e?w=800'
+                image: 'images/test1.jpg'
             },
             {
                 id: 2,
                 title: 'พุทธประวัติและหลักธรรมคำสอนของพระพุทธศาสนา',
                 url: 'https://forms.gle/xfSz2cwR4hNXyBYD8',
                 icon: '☸️',
-                image: 'https://images.unsplash.com/photo-1532635169-4c1e1246ce3f?w=800'
+                image: 'images/test2.jpg'
             },
             {
                 id: 3,
                 title: 'คุณค่าและหลักคำสอนของศาสนาอิสลาม',
                 url: 'https://forms.gle/6tDiN5DWiKZuY1oh6',
-                icon: '',
-                image: 'https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800'
+                icon: '☪️',
+                image: 'images/test3.jpg'
             },
             {
                 id: 4,
                 title: 'ประวัติศาสดาและคำสอนของศาสนาคริสต์',
                 url: 'https://forms.gle/7j6HVNEXdLsJmFR5A',
-                icon: '✝️',
-                image: 'https://images.unsplash.com/photo-1548625149-fc4a29cf7092?w=800'
+                icon: '️',
+                image: 'images/test4.jpg'
             },
             {
                 id: 5,
                 title: 'ประวัติศาสนาพราหมณ์-ฮินดู และหลักคำสอน',
                 url: 'https://forms.gle/YkwydJB9UobRVWPa6',
                 icon: '🕉️',
-                image: 'https://images.unsplash.com/photo-1561361603-148849480e9b?w=800'
+                image: 'images/test5.jpg'
             },
             {
                 id: 6,
                 title: 'ประวัติศาสดาและคำสอนของศาสนาซิกข์',
                 url: 'https://forms.gle/ATvfzaQPXsFF7PHM6',
                 icon: '📿',
-                image: 'https://images.unsplash.com/photo-1604542031651-512f487de09f?w=800'
+                image: 'images/test6.jpg'
             }
         ];
 
@@ -694,7 +692,7 @@
                         }, 500);
                     }, 500);
                 }
-            }, 30); // 30ms * 100 = 3000ms = 3 seconds
+            }, 30); // 30ms * 100 = 3000ms = 3 วินาที
         }
 
         // Switch Tabs
@@ -731,9 +729,7 @@
             card.className = 'test-card';
             
             card.innerHTML = `
-                <div class="test-image" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <span style="font-size: 5rem;">${test.icon}</span>
-                </div>
+                <img class="test-image" src="${test.image}" alt="${test.title}" onerror="this.style.display='none'">
                 <div class="test-content">
                     <span class="test-number">แบบทดสอบที่ ${test.id}</span>
                     <h3 class="test-title">${test.title}</h3>
@@ -762,21 +758,15 @@
                 confirmButtonColor: '#667eea',
                 cancelButtonColor: '#d33',
                 confirmButtonText: '<i class="fas fa-check"></i> เริ่มเลย',
-                cancelButtonText: '<i class="fas fa-times"></i> ยกเลิก',
-                customClass: {
-                    popup: 'swal2-popup-custom'
-                }
+                cancelButtonText: '<i class="fas fa-times"></i> ยกเลิก'
             });
             
             if (result.isConfirmed) {
-                // Show loading
                 document.getElementById('loadingOverlay').classList.add('active');
                 
-                // Record click
                 try {
                     await recordClick(testId);
                     
-                    // Open form
                     setTimeout(() => {
                         window.open(test.url, '_blank');
                         document.getElementById('loadingOverlay').classList.remove('active');
@@ -793,8 +783,6 @@
                 } catch (error) {
                     console.error('Error recording click:', error);
                     document.getElementById('loadingOverlay').classList.remove('active');
-                    
-                    // Still open even if error
                     window.open(test.url, '_blank');
                 }
             }
@@ -802,6 +790,11 @@
 
         // Record Click
         async function recordClick(testId) {
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า - ข้ามการบันทึกสถิติ');
+                return;
+            }
+            
             const response = await fetch(SCRIPT_URL, {
                 method: 'POST',
                 mode: 'no-cors',
@@ -820,6 +813,14 @@
 
         // Load Dashboard Data
         async function loadDashboardData() {
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+                console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า - ใช้ข้อมูลตัวอย่าง');
+                updateDashboardStats({ totalClicks: 0, totalUsers: 0, lastUpdate: null, tests: [] });
+                updateChart();
+                updateTable();
+                return;
+            }
+            
             try {
                 document.getElementById('loadingOverlay').classList.add('active');
                 
@@ -940,23 +941,6 @@
                 tbody.appendChild(row);
             });
         }
-
-        // Add custom CSS for SweetAlert
-        const style = document.createElement('style');
-        style.textContent = `
-            .swal2-popup-custom {
-                font-family: 'Prompt', sans-serif;
-            }
-            .swal2-title {
-                font-family: 'Prompt', sans-serif;
-                font-weight: 600;
-            }
-            .swal2-confirm {
-                font-family: 'Prompt', sans-serif;
-                font-weight: 600;
-            }
-        `;
-        document.head.appendChild(style);
     </script>
 </body>
 </html>
