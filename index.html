@@ -616,53 +616,52 @@
 
     <script>
         // ⚠️ สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ของคุณจาก Google Apps Script
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbykA8vwr8EuJl-ynct7ySdvftiJOM4ZUT9EPcFGJmoGYhA4px7i8sUajfPscTCAOTTYZA/exec';
+        const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
         
-        // Test Data - ใช้รูปภาพจากโฟลเดอร์ images/
+        // Test Data - ใช้รูปภาพจาก postimg.cc
         const testsData = [
-    {
-        id: 1,
-        title: 'บทบาทและคุณค่าของศาสนาในสังคมไทยยุคปัจจุบัน',
-        url: 'https://forms.gle/T7EX5fmKP6RvNSL99',
-        icon: '🕌',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test1.jpg'
-    },
-    {
-        id: 2,
-        title: 'พุทธประวัติและหลักธรรมคำสอนของพระพุทธศาสนา',
-        url: 'https://forms.gle/xfSz2cwR4hNXyBYD8',
-        icon: '☸️',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test2.jpg'
-    },
-    {
-        id: 3,
-        title: 'คุณค่าและหลักคำสอนของศาสนาอิสลาม',
-        url: 'https://forms.gle/6tDiN5DWiKZuY1oh6',
-        icon: '☪️',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test3.jpg'
-    },
-    {
-        id: 4,
-        title: 'ประวัติศาสดาและคำสอนของศาสนาคริสต์',
-        url: 'https://forms.gle/7j6HVNEXdLsJmFR5A',
-        icon: '✝️',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test4.jpg'
-    },
-    {
-        id: 5,
-        title: 'ประวัติศาสนาพราหมณ์-ฮินดู และหลักคำสอน',
-        url: 'https://forms.gle/YkwydJB9UobRVWPa6',
-        icon: '🕉️',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test5.jpg'
-    },
-    {
-        id: 6,
-        title: 'ประวัติศาสดาและคำสอนของศาสนาซิกข์',
-        url: 'https://forms.gle/ATvfzaQPXsFF7PHM6',
-        icon: '📿',
-        image: 'https://raw.githubusercontent.com/watttab/quiz/main/images/test6.jpg'
-    }
-];
+            {
+                id: 1,
+                title: 'บทบาทและคุณค่าของศาสนาในสังคมไทยยุคปัจจุบัน',
+                url: 'https://forms.gle/T7EX5fmKP6RvNSL99',
+                icon: '🕌',
+                image: 'https://i.postimg.cc/kgbDPqXy/test1.png'
+            },
+            {
+                id: 2,
+                title: 'พุทธประวัติและหลักธรรมคำสอนของพระพุทธศาสนา',
+                url: 'https://forms.gle/xfSz2cwR4hNXyBYD8',
+                icon: '☸️',
+                image: 'https://i.postimg.cc/fLwbdd7B/test2.png'
+            },
+            {
+                id: 3,
+                title: 'คุณค่าและหลักคำสอนของศาสนาอิสลาม',
+                url: 'https://forms.gle/6tDiN5DWiKZuY1oh6',
+                icon: '☪️',
+                image: 'https://i.postimg.cc/wv6BNN5Q/test3.png'
+            },
+            {
+                id: 4,
+                title: 'ประวัติศาสดาและคำสอนของศาสนาคริสต์',
+                url: 'https://forms.gle/7j6HVNEXdLsJmFR5A',
+                icon: '✝️',
+                image: 'https://i.postimg.cc/SsyK99Ld/test4.png'
+            },
+            {
+                id: 5,
+                title: 'ประวัติศาสนาพราหมณ์-ฮินดู และหลักคำสอน',
+                url: 'https://forms.gle/YkwydJB9UobRVWPa6',
+                icon: '🕉️',
+                image: 'https://i.postimg.cc/mDbr9936/test5.png'
+            },
+            {
+                id: 6,
+                title: 'ประวัติศาสดาและคำสอนของศาสนาซิกข์',
+                url: 'https://forms.gle/ATvfzaQPXsFF7PHM6',
+                icon: '📿',
+                image: 'https://i.postimg.cc/qRk7KKc9/test6.png'
+            }
         ];
 
         let chartInstance = null;
@@ -814,7 +813,7 @@
 
         // Load Dashboard Data
         async function loadDashboardData() {
-            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE') {
+            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbykA8vwr8EuJl-ynct7ySdvftiJOM4ZUT9EPcFGJmoGYhA4px7i8sUajfPscTCAOTTYZA/exec') {
                 console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า - ใช้ข้อมูลตัวอย่าง');
                 updateDashboardStats({ totalClicks: 0, totalUsers: 0, lastUpdate: null, tests: [] });
                 updateChart();
