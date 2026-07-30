@@ -90,6 +90,63 @@
             font-weight: 300;
         }
 
+        /* Debug Console */
+        #debugConsole {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 9999;
+            display: none;
+            border-top: 3px solid #FFD700;
+        }
+
+        #debugConsole.show {
+            display: block;
+        }
+
+        .debug-line {
+            margin: 2px 0;
+            padding: 2px;
+        }
+
+        .debug-error {
+            color: #ff4444;
+        }
+
+        .debug-success {
+            color: #00ff00;
+        }
+
+        .debug-info {
+            color: #44aaff;
+        }
+
+        #toggleDebug {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10000;
+            font-size: 12px;
+        }
+
+        #toggleDebug:hover {
+            background: #764ba2;
+        }
+
         /* Header */
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -186,6 +243,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
+            padding-bottom: 250px;
         }
 
         .content-section {
@@ -614,9 +672,15 @@
         </div>
     </footer>
 
+    <!-- Debug Console -->
+    <button id="toggleDebug" onclick="toggleDebugConsole()">
+        <i class="fas fa-bug"></i> Debug
+    </button>
+    <div id="debugConsole"></div>
+
     <script>
         // ⚠️ สำคัญ: เปลี่ยน URL นี้เป็น Web App URL ของคุณจาก Google Apps Script
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbypVbrBgluLVLmybCNPulIXRHwcisk5JfAnP6NcGjpMuAHZMflmDsph82vUaMXNnxGVeg/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec';
         
         // Test Data - ใช้รูปภาพจาก postimg.cc
         const testsData = [
@@ -652,7 +716,7 @@
                 id: 5,
                 title: 'ประวัติศาสนาพราหมณ์-ฮินดู และหลักคำสอน',
                 url: 'https://forms.gle/YkwydJB9UobRVWPa6',
-                icon: '🕉️',
+                icon: '️',
                 image: 'https://i.postimg.cc/mDbr9936/test5.png'
             },
             {
@@ -667,6 +731,22 @@
         let chartInstance = null;
         let dashboardData = [];
 
+        // Debug Functions
+        function debug(message, type = 'info') {
+            const console = document.getElementById('debugConsole');
+            const line = document.createElement('div');
+            line.className = 'debug-line debug-' + type;
+            const time = new Date().toLocaleTimeString();
+            line.textContent = `[${time}] ${message}`;
+            console.appendChild(line);
+            console.scrollTop = console.scrollHeight;
+            console.log(message);
+        }
+
+        function toggleDebugConsole() {
+            document.getElementById('debugConsole').classList.toggle('show');
+        }
+
         // Loading Screen
         window.addEventListener('load', () => {
             simulateLoading();
@@ -676,6 +756,9 @@
             let progress = 0;
             const progressFill = document.getElementById('progressFill');
             const loadingScreen = document.getElementById('loadingScreen');
+            
+            debug('Starting application...', 'info');
+            debug(`SCRIPT_URL: ${SCRIPT_URL}`, 'info');
             
             const interval = setInterval(() => {
                 progress += 1;
@@ -692,7 +775,7 @@
                         }, 500);
                     }, 500);
                 }
-            }, 30); // 30ms * 100 = 3000ms = 3 วินาที
+            }, 30);
         }
 
         // Switch Tabs
@@ -706,9 +789,11 @@
             if (tab === 'tests') {
                 buttons[0].classList.add('active');
                 document.getElementById('testsSection').classList.add('active');
+                debug('Switched to Tests tab', 'info');
             } else {
                 buttons[1].classList.add('active');
                 document.getElementById('dashboardSection').classList.add('active');
+                debug('Switched to Dashboard tab', 'info');
                 loadDashboardData();
             }
         }
@@ -722,6 +807,8 @@
                 const card = createTestCard(test);
                 grid.appendChild(card);
             });
+            
+            debug(`Loaded ${testsData.length} tests`, 'success');
         }
 
         function createTestCard(test) {
@@ -746,9 +833,10 @@
             return card;
         }
 
-        // Start Test - แก้ไขแล้ว: เปิด Form ทันที!
+        // Start Test
         async function startTest(testId) {
             const test = testsData.find(t => t.id === testId);
+            debug(`Starting test ${testId}: ${test.title}`, 'info');
             
             const result = await Swal.fire({
                 title: 'ยืนยันการเริ่มทำแบบทดสอบ',
@@ -762,18 +850,23 @@
             });
             
             if (result.isConfirmed) {
+                debug(`User confirmed test ${testId}`, 'success');
+                
                 // เปิด Google Form ทันที!
                 window.open(test.url, '_blank');
+                debug(`Opened Google Form: ${test.url}`, 'info');
                 
                 // บันทึกสถิติ (ถ้า SCRIPT_URL ถูกตั้งค่า)
-                if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbypVbrBgluLVLmybCNPulIXRHwcisk5JfAnP6NcGjpMuAHZMflmDsph82vUaMXNnxGVeg/exec') {
+                if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec') {
                     try {
+                        debug(`Recording click for test ${testId}...`, 'info');
                         await recordClick(testId);
-                        console.log('บันทึกสถิติสำเร็จ');
+                        debug('Click recorded successfully!', 'success');
                     } catch (error) {
-                        console.error('Error recording click:', error);
-                        // ไม่แสดง error ให้ผู้ใช้เห็น
+                        debug(`Error recording click: ${error.message}`, 'error');
                     }
+                } else {
+                    debug('SCRIPT_URL not configured - skipping statistics', 'error');
                 }
                 
                 Swal.fire({
@@ -783,36 +876,49 @@
                     confirmButtonColor: '#667eea',
                     timer: 2000
                 });
+            } else {
+                debug('User cancelled test', 'info');
             }
         }
 
         // Record Click
         async function recordClick(testId) {
-            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbypVbrBgluLVLmybCNPulIXRHwcisk5JfAnP6NcGjpMuAHZMflmDsph82vUaMXNnxGVeg/exec') {
-                console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า - ข้ามการบันทึกสถิติ');
+            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec') {
+                debug('SCRIPT_URL not configured', 'error');
                 return;
             }
             
-            const response = await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'recordClick',
-                    testId: testId,
-                    timestamp: new Date().toISOString()
-                })
-            });
+            const timestamp = new Date().toISOString();
             
-            return response;
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'recordClick',
+                        testId: testId,
+                        timestamp: timestamp
+                    })
+                });
+                
+                debug(`Record click response status: ${response.status}`, 'info');
+                return response;
+                
+            } catch (error) {
+                debug(`Fetch error: ${error.message}`, 'error');
+                throw error;
+            }
         }
 
         // Load Dashboard Data
         async function loadDashboardData() {
-            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbypVbrBgluLVLmybCNPulIXRHwcisk5JfAnP6NcGjpMuAHZMflmDsph82vUaMXNnxGVeg/exec') {
-                console.warn('SCRIPT_URL ยังไม่ได้ตั้งค่า - ใช้ข้อมูลตัวอย่าง');
+            debug('Loading dashboard data...', 'info');
+            
+            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec') {
+                debug('SCRIPT_URL not configured - showing demo data', 'error');
                 updateDashboardStats({ totalClicks: 0, totalUsers: 0, lastUpdate: null, tests: [] });
                 updateChart();
                 updateTable();
@@ -821,20 +927,35 @@
             
             try {
                 document.getElementById('loadingOverlay').classList.add('active');
+                debug('Fetching statistics from Google Apps Script...', 'info');
                 
                 const response = await fetch(SCRIPT_URL + '?action=getStats');
+                debug(`Response status: ${response.status}`, 'info');
+                
                 const data = await response.json();
+                debug(`Received data: ${JSON.stringify(data)}`, 'info');
                 
-                dashboardData = data.tests || [];
-                
-                updateDashboardStats(data);
-                updateChart();
-                updateTable();
+                if (data.success) {
+                    dashboardData = data.tests || [];
+                    debug(`Loaded ${dashboardData.length} test statistics`, 'success');
+                    
+                    updateDashboardStats(data);
+                    updateChart();
+                    updateTable();
+                } else {
+                    debug(`API error: ${data.error}`, 'error');
+                    Swal.fire({
+                        title: 'เกิดข้อผิดพลาด',
+                        text: 'ไม่สามารถโหลดข้อมูล Dashboard ได้',
+                        icon: 'error',
+                        confirmButtonColor: '#667eea'
+                    });
+                }
                 
                 document.getElementById('loadingOverlay').classList.remove('active');
                 
             } catch (error) {
-                console.error('Error loading dashboard:', error);
+                debug(`Error loading dashboard: ${error.message}`, 'error');
                 document.getElementById('loadingOverlay').classList.remove('active');
                 
                 Swal.fire({
@@ -852,6 +973,8 @@
             
             const lastUpdate = data.lastUpdate ? new Date(data.lastUpdate).toLocaleDateString('th-TH') : '-';
             document.getElementById('lastUpdate').textContent = lastUpdate;
+            
+            debug('Dashboard stats updated', 'success');
         }
 
         function updateChart() {
@@ -912,6 +1035,8 @@
                     }
                 }
             });
+            
+            debug('Chart updated', 'success');
         }
 
         function updateTable() {
@@ -938,6 +1063,8 @@
                 
                 tbody.appendChild(row);
             });
+            
+            debug('Table updated', 'success');
         }
     </script>
 </body>
