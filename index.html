@@ -255,8 +255,8 @@
         <div class="footer-copy">© 2026 Mr.Watttanapong Thapthani. All rights reserved.</div>
     </footer>
 
-    <script>
-        // ⚠️ ใส่ Web App URL จาก Google Apps Script ที่นี่
+        <script>
+        // ⚠️ ใส่ Web App URL จาก Google Apps Script ที่นี่ (ถูกต้องแล้ว)
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec';
 
         const testsData = [
@@ -271,7 +271,7 @@
         let chartInstance = null;
         let dashboardData = [];
 
-        // Loading - ใช้ setTimeout แทน setInterval เพื่อความเสถียร
+        // Loading
         window.addEventListener('load', function() {
             console.log('Page loaded');
             let progress = 0;
@@ -344,7 +344,8 @@
                 if (result.isConfirmed) {
                     window.open(test.url, '_blank');
                     
-                    if (SCRIPT_URL !== 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec') {
+                    // ✅ แก้ไขแล้ว: ตรวจสอบว่าไม่ใช่ค่าเริ่มต้น (YOUR_GOOGLE_APPS_SCRIPT_URL_HERE)
+                    if (SCRIPT_URL !== 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' && SCRIPT_URL !== '') {
                         fetch(SCRIPT_URL, {
                             method: 'POST',
                             mode: 'no-cors',
@@ -373,7 +374,8 @@
         }
 
         function loadDashboardData() {
-            if (SCRIPT_URL === 'https://script.google.com/macros/s/AKfycbyeOivc-FACHLysoLmqcHJ5QEO27O0qraGdZTSvY6Zdv36DXh69aiWiXHodC3faKlBDsA/exec') {
+            // ✅ แก้ไขแล้ว: ตรวจสอบว่ายังเป็นค่าเริ่มต้นอยู่หรือไม่
+            if (SCRIPT_URL === 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE' || SCRIPT_URL === '') {
                 console.log('ยังไม่ได้ตั้งค่า SCRIPT_URL');
                 updateDashboardStats({ totalClicks: 0, totalUsers: 0, lastUpdate: null, tests: [] });
                 updateChart();
